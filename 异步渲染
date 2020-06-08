@@ -49,6 +49,7 @@ function queueWatcher(watcher) {
     if (!waiting) {
       waiting = true   // 锁：等待tick执行中
       nextTick(flushSchedulerQueue)  // !!人工构造微任务，这些微任务，会在任务队列清空后，进入任务队列
+      // 如何人工构造微任务，将在nextTick实现中介绍
     }
   }
 }
