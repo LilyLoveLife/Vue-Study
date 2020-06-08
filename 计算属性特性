@@ -1,0 +1,38 @@
+1. 使用：对象，对象的属性是函数，函数返回一个值
+computed: {
+  projectId () {
+     return this.$route.params.id || 0
+  },
+}
+computed: {
+  projectId: {
+      get () {
+        return this.$route.params.id || 0
+      },
+      set (newVal) {
+        
+      },
+      lazy: true, // 默认为true， 即默认缓存
+  },
+}
+
+
+3. 可缓存
+initComputed (vm, computed) {
+  vm.computedWatcher = Object.create(null)
+  for (let key in computed) {
+    let getter = typeOf computed[key] === 'function' ? computed[key] : computed[key].get
+    let watcher = new Watcher(vm, getter, {lazy: true})
+    getter = function () {
+      return function computedGetter() {
+        if (watcher.lazy) {
+          watcher.evaluate()
+        }
+        watcher.depend()
+        return watcher.value
+      }
+    }
+     vm.computedWatcher[key] = getter
+     Object.defineProperty(vm, key, gettter)
+  }
+}
