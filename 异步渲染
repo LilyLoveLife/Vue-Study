@@ -25,9 +25,15 @@ class Watcher {
   update () {
     queueWatcher(this)
   }
+  run () {
+    const value = this.get()
+    this.value = value // 更新被观察者在watcher中的值，要记得被观察者通过new Watcher()传递到watcher实例中的，外界的被观察者变化了，但是watcher实例中的
+    
+  }
+  }
 }
 
-2. 锁机制
+2. queueWatcher中的锁机制
 var has = {}
 var flushing = false // 锁：更新中。用于判断是否正在执行更新中，从而决定新加入的watcher在queue中放置位置
 var waiting = false // 锁：tick未执行。用于判断是否在等待上一个nexTick执行中，从而决定是否执行新的nextTick, nextTick设置新的微任务队列
@@ -54,7 +60,18 @@ function queueWatcher(watcher) {
   }
 }
 
-3. 
+3. flushSchedulerQueue实现
+ function flushSchedulerQueue() {
+    for (index; index < queue.length; i++) { // 注意：这里的index是2中的全局变量index，在2中用于识别queue中执行到哪一个更新，以便插入新加入的watcher
+      queue[index].run()  // watcher.run
+    }
+ }
+ Watcher中
+ run () {
+   const value = this.get()
+   this.value = value // 更新被观察
+   this.cb.call(this.vm, value, oldValue)
+ }
 
 
 
