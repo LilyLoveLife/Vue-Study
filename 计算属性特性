@@ -22,7 +22,7 @@ initComputed (vm, computed) {
   vm.computedWatcher = Object.create(null)
   for (let key in computed) {
     let getter = typeOf computed[key] === 'function' ? computed[key] : computed[key].get
-    let watcher = new Watcher(vm, getter, {lazy: true})
+    let watcher = new Watcher(vm, getter, {lazy: true}) // 自己对别人的依赖，加入别人的deps
     getter = function () {
       return function computedGetter() {
         if (watcher.dirty) { // 若依赖的值发生变化，则重新计算watcher.value
@@ -32,7 +32,7 @@ initComputed (vm, computed) {
         return watcher.value // 返回watcher
       }
     }
-     Object.defineProperty(vm, key, gettter)
+     Object.defineProperty(vm, key, gettter) // 别人对自己的依赖，将别人加入自己的deps
   }
 }
 
@@ -44,7 +44,7 @@ class Watcher {
   }
   get () {
     try {
-      value = this.getter.call(vm, vm)
+      value = this.getter.call(vm, vm) // 调用getter，会访问expOrFn中的各个数据，从而使得自身加入了各个数据的依赖deps中
     } catch () {
     } finally() {}
     return value
