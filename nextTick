@@ -33,6 +33,7 @@
         }
      2.3 setTimeout 这一个是宏任务，是js自身实现的，与平台无关，可以作为其他方式的兜底。
         setimeout是宏任务，所以在执行栈已清空、微任务已执行、页面已渲染之后，才执行settimeout
+        微任务是在GUI重新渲染之前执行，宏任务是GUI重新渲染之后执行
         timeFunc = () => {
           setTimeout(flushCallbacks, 0)
         }
