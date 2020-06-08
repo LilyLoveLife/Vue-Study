@@ -67,7 +67,7 @@ function queueWatcher(watcher) {
     }
     // 执行完queue中操作后，重置各项数据
     flushing = waiting = false  // 各种锁
-    queue.length = 0   // 清空queue，发散：可以通过出队列操作来执行queue, 这里就不用手动清空，前面也不用通过index判断queue中执行得到的位置，可以Array.prototype.unshift将新加入的watcher直接插入queue的队列头部
+    queue.length = 0   // 清空queue，发散：可以通过出队列操作来执行queue, 这里就不用手动清空，前面2中也不用通过index判断queue中执行得到的位置，可以改成，用Array.prototype.unshift，将新加入的watcher直接插入queue的队列头部
  }
  Watcher中
  run () {
