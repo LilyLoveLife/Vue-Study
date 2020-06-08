@@ -1,25 +1,29 @@
 1. 父子组件直接通信
-   1.1 
-   	props
-   	on
+	1.1 
+   		props
+   		on
 	
-	1.2 子组件不可修改父组件传递过来的props，因为父组件下可能有多个子组件，会导致数据流混乱。只有父组件可以修改。
-
+	1.2 对于基础类型，是传值，子组件修改不了props在父组件的源
+		对于引用类型，是传址，子组件修改会影响到父组件中的props源
+		因为父组件下可能有多个子组件，会导致数据流混乱。只有父组件可以修改。
+		initProps中defineReactive时，第四个参数重新定义了set，对props的修改操作进行了拦截warning
 2. 全能 bus总线通信
 
 3. vuex
 
 4. 隔代组件通信 $attrs $listeners inheritAttrs---style、class除外
 	4.1 隔代情形，中间级需要加上$attrs $listeners进行绑定传递，因为子组件的继承依赖于父级作用域的绑定
-	4.2 
+	4.2 使用
 		父组件中：<child :name='Lucy' :tel="123456" @on="event1"  @on="event2">
 		子组件中：<grand-child v-bind="$attrs" v-on="$listeners"></grand-child>
 				this.name this.tel this.emit('event1') this.emit('event2')
 		孙子组件中：this.name this.tel this.emit('event1') this.emit('event2')
-	$attrs: 包含所有父作用域的绑定（style、class除外）
-	$listeners: 父作用域中的 (不含.native 修饰器的)v-on事件监听器
-	Attrs: 默认情况下父作用域的不被认作 props 的 attribute 绑定 (attribute bindings) 将会“回退”且作为普通的 HTML attribute 应用在子组件的根元素上。false：非props绑定不被继承为子组件的html属性
-	4.3 响应式的，和props一样用defineReactive处理过
+		
+		$attrs: 包含所有父作用域的绑定（style、class除外）
+		$listeners: 父作用域中的 (不含.native 修饰器的)v-on事件监听器
+		Attrs: 默认情况下父作用域的不被认作 props 的 attribute 绑定 (attribute bindings) 将会“回退”且作为普通的 HTML attribute 应用在子组件的根元素上。false：非props绑定不被继承为子组件的html属性
+	4.3 隔代情形，中间级需要加上$attrs $listeners进行绑定传递，因为子组件的继承依赖于父级作用域的绑定
+	4.4 响应式的，和props一样用defineReactive处理过
 	
 5. 隔代组件通信 provide inject
 	5.1 用法
