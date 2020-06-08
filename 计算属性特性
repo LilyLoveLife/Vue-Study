@@ -25,14 +25,32 @@ initComputed (vm, computed) {
     let watcher = new Watcher(vm, getter, {lazy: true})
     getter = function () {
       return function computedGetter() {
-        if (watcher.lazy) {
+        if (watcher.dirty) { // 若依赖的值发生变化，则重新计算watcher.value
           watcher.evaluate()
         }
-        watcher.depend()
-        return watcher.value
+        watcher.depend() // 收集依赖
+        return watcher.value // 返回watcher
       }
     }
-     vm.computedWatcher[key] = getter
      Object.defineProperty(vm, key, gettter)
   }
+}
+
+class Watcher {
+  constructor () {
+    this.lazy = lazy
+    this.getter = expOrFn    // expOrFn
+    this.value = this.lazy ? undefined : this.get()
+  }
+  get () {
+    try {
+      value = this.getter.call(vm, vm)
+    } catch () {
+    } finally() {}
+    return value
+  }
+  evaluate () {
+    this.value = this.get()       // expOrFn
+  }
+  
 }
