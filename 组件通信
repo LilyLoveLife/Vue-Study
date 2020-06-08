@@ -7,8 +7,12 @@
 3. vuex
 
 4. 隔代组件通信 $attrs $listeners inheritAttrs---style、class除外
+	4.1 隔代情形，中间级需要加上$attrs $listeners进行绑定传递，因为子组件的继承依赖于父级作用域的绑定
+	4.2 
 	$attrs: 包含所有父作用域的绑定（style、class除外）
 	$listeners: 父作用域中的 (不含.native 修饰器的)v-on事件监听器
 	Attrs: 默认情况下父作用域的不被认作 props 的 attribute 绑定 (attribute bindings) 将会“回退”且作为普通的 HTML attribute 应用在子组件的根元素上。false：非props绑定不被继承为子组件的html属性
+	4.3 响应式的，和props一样用defineReactive处理过
 	
 5. 隔代组件通信 provide inject
+	
