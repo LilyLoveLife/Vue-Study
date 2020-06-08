@@ -1,1 +1,38 @@
 
+1. 整体
+    var callbacks = []
+    function nextTick (cb) {
+      callbacks.push(() => {
+        cb()
+      })
+      if (!pending) { // 锁：判断上一次tick是否执行完了，执行结束才可以进入下一次。也就是，js任务队列清空了，才可以将新的微任务加入任务队列
+        pending = true
+        timeFunc() // !!微任务加入任务队列
+      }
+    }
+
+
+2. 根据不同的兼容性，微任务有多种构建方式
+    2.1 promise
+        timeFunc = () => {
+          Promise.resolve().then(flushCallbacks)
+        }
+        timeFunc = () => {
+          setImmediate(flushCallbacks)
+        }
+    2.2 MutationObserver
+        let counter = 1
+        const observer = new MutationObserver(callbacks)
+        let textNode = documnent.createTextNode(String(counter))
+        observer(textNode, {
+           characterData: true
+        })
+        timefunc = () => {
+          counter = (counter + 1) % 2
+          textNode.text = String(counter)
+        }
+     2.3 setTimeout 这一个是宏任务，是js自身实现的，与平台无关，可以作为其他方式的兜底。
+        setimeout是宏任务，所以在执行栈已清空、微任务已执行、页面已渲染之后，才执行settimeout
+        timeFunc = () => {
+          setTimeout(flushCallbacks, 0)
+        }
