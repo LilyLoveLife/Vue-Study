@@ -1,0 +1,14 @@
+1. 父子组件直接通信
+   props
+   on
+
+2. 全能 bus总线通信
+
+3. vuex
+
+4. 隔代组件通信 $attrs $listeners inheritAttrs---style、class除外
+	$attrs: 包含所有父作用域的绑定（style、class除外）
+	$listeners: 父作用域中的 (不含.native 修饰器的)v-on事件监听器
+	Attrs: 默认情况下父作用域的不被认作 props 的 attribute 绑定 (attribute bindings) 将会“回退”且作为普通的 HTML attribute 应用在子组件的根元素上。false：非props绑定不被继承为子组件的html属性
+	
+5. 隔代组件通信 provide inject
