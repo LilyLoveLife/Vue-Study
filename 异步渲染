@@ -1,0 +1,59 @@
+1. 响应式原理--观察者模式
+
+修改某个数据时，调用它的set函数。
+set中有dep.notify()，dep是每个数据自己的Dep实例，在dep中维护依赖集合
+
+// 被观察者，管理依赖subs
+class Dep {
+  constructor () {
+    this.subs = []
+  }
+  notify () {
+    for(let i = 0; i < this.subs.length; i++) {
+      this.subs[i].update() // 每个sub是一个watcher
+    }
+  }
+}
+
+// 观察者
+class Watcher {
+  constructor () {
+    this.getter = exprOrFn
+    this.value = this.getter // 被观察的数据
+    this.cb = cb   // 被观察的数据变化时，执行回调
+  }
+  update () {
+    queueWatcher(this)
+  }
+}
+
+2. 锁机制
+var has = {}
+var flushing = false // 锁：更新中。用于判断是否正在执行更新中，从而决定新加入的watcher在queue中放置位置
+var waiting = false // 锁：tick未执行。用于判断是否在等待上一个nexTick执行中，从而决定是否执行新的nextTick, nextTick设置新的微任务队列
+var queue = []
+var index = 0   // 执行到哪一个更新
+function queueWatcher(watcher) {
+  var id = watcher.id
+  if (!has[id]) {
+    if (flushing) { // 更新中，新加入的watcher需要放在queue中即将执行的位置，
+      var i = queue.length
+      while(i > index && queue[i].id > queue[index].id) { // queue中找到当前将要执行watcher的位置
+        i--
+      }
+      queue.splice(i+1, 0, watcher) // 将新进入的watcher放置在queue中即将执行的位置
+      
+    } else { // 未执行更新、已经执行完队列中全部更新：新进入watcher直接放到queue末尾
+      queue.push(watcher)
+    }
+    if (!waiting) {
+      waiting = true   // 锁：等待tick执行中
+      nextTick(flushSchedulerQueue)  // !!人工构造微任务，这些微任务，会在任务队列清空后，进入任务队列
+    }
+  }
+}
+
+3. 
+
+
+
