@@ -62,9 +62,12 @@ function queueWatcher(watcher) {
 
 3. flushSchedulerQueue实现
  function flushSchedulerQueue() {
-    for (index; index < queue.length; i++) { // 注意：这里的index是2中的全局变量index，在2中用于识别queue中执行到哪一个更新，以便插入新加入的watcher
+    for (index; index < queue.length; index++) { // 注意：这里的index是2中的全局变量index，在2中用于识别queue中执行到哪一个更新，以便插入新加入的watcher
       queue[index].run()  // watcher.run
     }
+    // 执行完queue中操作后，重置各项数据
+    flushing = waiting = false  // 各种锁
+    queue.length = 0   // 清空queue，发散：可以通过出队列操作来执行queue, 这里就不用手动清空，前面也不用通过index判断queue中执行得到的位置，可以Array.prototype.unshift将新加入的watcher直接插入queue的队列头部
  }
  Watcher中
  run () {
