@@ -10,7 +10,7 @@ Vue.prototype.$mount => 先编译compileToFunctions再渲染mountComponent
                           Vue.prototype._update中Vue.prototype.__patch__ 得到真实dom
                     => new Watcher(vm,updateComponent,)将模板与数据建立联系
 二、组件实例化过程
-initRender =》createElement =》createComponent =》Vue.extend继承 & installComponentHooks & vnode
+initRender =》createElement =》createComponent =》Vue.extend继承Vue得到子组件构造函数 & installComponentHooks & vnode
   
    function createComponent(data) {
       if (常规组件)
