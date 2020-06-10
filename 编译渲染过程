@@ -1,3 +1,4 @@
+一、渲染流程
 1. 获取模板template
 2. 根据template编译compile得到render函数 ----- this.options.render
 3. render计算可到新的vdom, 对比新旧vdom，并对实际的dom进行更新 -------Vue.prototype._update =》patch
@@ -5,5 +6,34 @@
 Vue.prototype.$mount => 先编译compileToFunctions再渲染mountComponent
 编译：compileToFunctions =》 compile => parse得到ast => optimize标识static  => generate得到render函数
 渲染：mountComponent => new Watcher(将模板与数据建立联系) && Vue.prototype._render（创建新的vdom） & Vue.prototype._update(对比新旧vdom并更新到真实dom) => Vue.prototype.__patch__ => patch
+
+二、组件实例化过程
+initRender =》createElement =》createComponent =》Vue.extend继承 & installComponentHooks & vnode
+  
+   function createComponent(data) {
+      if (常规组件)
+        Ctor = baseCtor.extend(Ctor) // 继承Vue
+      if (异步组件)
+        Ctor = resolveAsyncComponent(asyncFactory, baseCtor)
+
+      // resolveAsyncComponent加载异步组件
+      if (resolveAsyncComponent() === undefined) {
+        return createAsyncPlaceholder() // 没有加载完，则创建占位符
+      }
+      installComponentHooks(data) // 
+      const vnode = new VNode(, , , , {Ctor})
+      return vnode
+    }
+    
+    installComponentHooks => componentVNodeHooks对象 =》 componentVNodeHooks.init
+    => child=vnode.componentInstance=createComponentInstanceForVnode & child.$mount
+    
+    createComponentInstanceForVnode=> new vnode.componentOptions.Ctor(options)  -----注意：找了很久的子组件实例化在这里
+
+
+三、上述步骤二在步骤一之前执行，先实例化，再编译渲染
+
+
+
 
 参考：【Vue2.0 源码阅读：模板渲染】http://zhouweicsu.github.io/blog/2017/04/21/vue-2-0-template/
