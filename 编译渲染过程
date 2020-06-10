@@ -5,8 +5,10 @@
 
 Vue.prototype.$mount => 先编译compileToFunctions再渲染mountComponent
 编译：compileToFunctions =》 compile => parse得到ast => optimize标识static  => generate得到render函数
-渲染：mountComponent => new Watcher(将模板与数据建立联系) && Vue.prototype._render（创建新的vdom） & Vue.prototype._update(对比新旧vdom并更新到真实dom) => Vue.prototype.__patch__ => patch
-
+渲染：mountComponent => updateComponent = function() { vm._update(vm._render(), hydrating) }
+                          Vue.prototype._render（创建新的vdom） & Vue.prototype._update(对比新旧vdom并更新到真实dom)
+                          Vue.prototype._update中Vue.prototype.__patch__ 得到真实dom
+                    => new Watcher(vm,updateComponent,)将模板与数据建立联系
 二、组件实例化过程
 initRender =》createElement =》createComponent =》Vue.extend继承 & installComponentHooks & vnode
   
