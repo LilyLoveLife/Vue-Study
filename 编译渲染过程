@@ -4,6 +4,6 @@
 
 Vue.prototype.$mount => 先编译compileToFunctions再渲染mountComponent
 编译：compileToFunctions =》 compile => parse得到ast => optimize标识static  => generate得到render函数
-渲染：mountComponent => Vue.prototype._render & Vue.prototype._update => Vue.prototype.__patch__ => patch
+渲染：mountComponent => new Watcher(将模板与数据建立联系) && Vue.prototype._render（创建新的vdom） & Vue.prototype._update(对比新旧vdom并更新到真实dom) => Vue.prototype.__patch__ => patch
 
 参考：【Vue2.0 源码阅读：模板渲染】http://zhouweicsu.github.io/blog/2017/04/21/vue-2-0-template/
