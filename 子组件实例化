@@ -1,0 +1,27 @@
+
+
+  initRender =》createElement =》createComponent =》Vue.extend继承 & installComponentHooks & vnode
+  
+   function createComponent(data) {
+      if (常规组件)
+        Ctor = baseCtor.extend(Ctor) // 继承Vue
+      if (异步组件)
+        Ctor = resolveAsyncComponent(asyncFactory, baseCtor)
+
+      // resolveAsyncComponent加载异步组件
+      if (resolveAsyncComponent() === undefined) {
+        return createAsyncPlaceholder() // 没有加载完，则创建占位符
+      }
+      installComponentHooks(data) // 
+      const vnode = new VNode(, , , , {Ctor})
+      return vnode
+    }
+    
+    installComponentHooks => componentVNodeHooks对象 =》 componentVNodeHooks.init
+    => child=vnode.componentInstance=createComponentInstanceForVnode & child.$mount
+    
+    createComponentInstanceForVnode=> new vnode.componentOptions.Ctor(options)  -----注意：找了很久的子组件实例化在这里
+    
+    
+
+
