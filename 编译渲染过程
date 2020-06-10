@@ -1,0 +1,7 @@
+1. 获取模板template
+2. 根据template编译compile得到render函数 ----- this.options.render
+3. render计算可到新的vdom, 对比新旧vdom，并对实际的dom进行更新 -------Vue.prototype._update =》patch
+
+Vue.prototype.$mount => 先编译compileToFunctions再渲染mountComponent
+编译：compileToFunctions =》 compile => parse得到ast => optimize标识static  => generate得到render函数
+渲染：mountComponent => Vue.prototype._render & Vue.prototype._update => Vue.prototype.__patch__ => patch
