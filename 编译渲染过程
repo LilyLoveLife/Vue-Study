@@ -31,7 +31,7 @@ initRender =》createElement =》createComponent =》Vue.extend继承 & installC
     createComponentInstanceForVnode=> new vnode.componentOptions.Ctor(options)  -----注意：找了很久的子组件实例化在这里
 
 
-三、上述步骤二在步骤一之前执行，先实例化，再编译渲染
+三、上述步骤二在步骤一之前执行，先实例化，再编译渲染。参见源码Vue.prototype._init中，先initRender再vm.$mount(vm.$options.el)
 
 
 
