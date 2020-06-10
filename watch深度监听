@@ -41,7 +41,7 @@ class Watcher {
   }
   get () {
     try {
-      value = this.getter.call(vm, vm) // 通过expOrFn获取观察者的值。相当于触发数据的get，从而将该观察者加入对应被观察者的依赖集deps中
+      value = this.getter.call(vm, vm) // 通过expOrFn获取观察者的值。计算过程中触发被观察者的get，从而将该观察者加入对应被观察者的依赖集deps中
     }finally () {
       if (this.deep) { // 深度监听
         traverse(value) // 会对对象中的每一项取值,取值时会执行对应的get方法 case：initWatch时，监听对象是个对象，会将观察者加入被监听对象的每一个属性的deps中
