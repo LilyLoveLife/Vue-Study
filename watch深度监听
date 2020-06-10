@@ -36,16 +36,18 @@ class Watcher {
   constructor (vm, exprOrFn, cb, options, isRenderWatcher) {
     this.deep = !!options.deep
     this.value = this.get()
-    this.getter = expOrFn // 监听的数据
+    this.getter = expOrFn // 该观察者的表达式，用于获取观察者的值
+    this.cb = cb //监听到变化时，该观察者执行的回调
   }
   get () {
     try {
-      value = this.getter.call(vm, vm) // 通过expOrFn获取观察者的值。相当于触发数据的get，从而将该观察者加入对应被观察者依赖集deps中
+      value = this.getter.call(vm, vm) // 通过expOrFn获取观察者的值。相当于触发数据的get，从而将该观察者加入对应被观察者的依赖集deps中
     }finally () {
       if (this.deep) { // 深度监听
         traverse(value) // 会对对象中的每一项取值,取值时会执行对应的get方法 case：initWatch时，监听对象是个对象，会将观察者加入被监听对象的每一个属性的deps中
       }
     }
+    return value // 返回该观察者的新值
   }
 }
 
