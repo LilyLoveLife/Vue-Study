@@ -1,0 +1,9 @@
+1. Object.defineProperty(obj, key, {get, set})
+  用get、set进行劫持
+  get中进行依赖收集
+  set进行notify，即触发每一个依赖的更新操作
+
+2.对象、数组的响应化处理不同
+直接修改数组某一项
+
+3.data、computed、watch、props中均用到
