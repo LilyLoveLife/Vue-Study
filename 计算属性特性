@@ -18,6 +18,9 @@ computed: {
 
 
 3. 可缓存
+计算属性在初始化的时候，实例化Watcher以将加蒜属性观察化，传参lazy:true，即计算属性默认缓存。
+当计算属性依赖的数据发生变化，notify调用watcher的update方法，设置dirty为true，且不执行更新。
+当使用
 initComputed (vm, computed) {
   vm.computedWatcher = Object.create(null)
   for (let key in computed) {
@@ -25,7 +28,7 @@ initComputed (vm, computed) {
     let watcher = new Watcher(vm, getter, {lazy: true}) // 自己对别人的依赖，加入别人的deps
     getter = function () {
       return function computedGetter() {
-        if (watcher.dirty) { // 若依赖的值发生变化，则重新计算watcher.value
+        if (watcher.dirty) { // 若依赖的值发生变化，则重新计算watcher.value，计算后，设置dirty为false
           watcher.evaluate()
         }
         watcher.depend() // 收集依赖
@@ -51,6 +54,7 @@ class Watcher {
   }
   evaluate () {
     this.value = this.get()       // expOrFn
+    this.dirty = false
   }
   
 }
