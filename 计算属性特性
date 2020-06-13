@@ -19,7 +19,7 @@ computed: {
 
 3. 可缓存
 计算属性在初始化的时候，实例化Watcher以将计算属性观察化，传参lazy:true，即计算属性默认缓存。
-当计算属性依赖的数据发生变化，notify调用watcher的update方法，设置dirty为true，且不执行更新。
+当计算属性依赖的数据发生变化，notify调用watcher的update方法，因为lazy为true，设置dirty为true，且不执行更新。
 当使用该计算属性时，调用它的getter，getter中被劫持：因为之前被观察者变化设置了该计算属性的watcher.dirty为true,所以需要重新计算watcher.evaluate()。
 若之前被观察者没有变化，则该计算属性的watcher.dirty仍然为false，直接用上一次的值watcher.value。
 initComputed (vm, computed) {
