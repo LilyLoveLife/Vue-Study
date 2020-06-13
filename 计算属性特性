@@ -12,15 +12,16 @@ computed: {
       set (newVal) {
         
       },
-      lazy: true, // 默认为true， 即默认缓存
+      cache: false, // 默认为undefined， 判断时候用cache !== false, 不进行类型转换，故undefined为默认缓存
   },
 }
 
 
 3. 可缓存
-计算属性在初始化的时候，实例化Watcher以将加蒜属性观察化，传参lazy:true，即计算属性默认缓存。
+计算属性在初始化的时候，实例化Watcher以将计算属性观察化，传参lazy:true，即计算属性默认缓存。
 当计算属性依赖的数据发生变化，notify调用watcher的update方法，设置dirty为true，且不执行更新。
-当使用
+当使用该计算属性时，调用它的getter，getter中被劫持：因为之前被观察者变化设置了该计算属性的watcher.dirty为true,
+所以需要重新计算watcher.evaluate()。若之前被观察者没有变化，则该计算属性的watcher.dirty仍然为false，直接用上一次的值watcher.value。
 initComputed (vm, computed) {
   vm.computedWatcher = Object.create(null)
   for (let key in computed) {
@@ -29,7 +30,7 @@ initComputed (vm, computed) {
     getter = function () {
       return function computedGetter() {
         if (watcher.dirty) { // 若依赖的值发生变化，则重新计算watcher.value，计算后，设置dirty为false
-          watcher.evaluate()
+          watcher.evaluate() // 重新计算，即更新watcher.value
         }
         watcher.depend() // 收集依赖
         return watcher.value // 返回watcher
