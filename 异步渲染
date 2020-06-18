@@ -72,7 +72,7 @@ function queueWatcher(watcher) {
  Watcher中
  run () {
    const value = this.get()
-   this.value = value // 更新watcher实例中被观察的值，因为这里没有vue的响应式，所以需要手动更新
+   this.value = value // 更新watcher实例中被观察的值
    this.cb.call(this.vm, value, oldValue)  // 执行回调，这里才是被观察者变化造成的影响
  }
 
